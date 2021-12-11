@@ -61,3 +61,87 @@ const quote47 = quoteFactory(47, 'low energy', ['red','orange','yellow'],1,'"Bel
 const quote48 = quoteFactory(48, 'low energy', ['red','orange'],1,'“When I look back on all these worries, I remember the story of the old man who said on his deathbed that he had had a lot of trouble in his life, most of which had never happened.” - Winston Churchill');
 
 let quoteArray = [quote1,quote2,quote3,quote4,quote5,quote6,quote7,quote8,quote9,quote10,quote11,quote12,quote13,quote14,quote15,quote16,quote17,quote18,quote19,quote20,quote21,quote22,quote23,quote24,quote25,quote26,quote27,quote28,quote29,quote30,quote31,quote32,quote33,quote34,quote35,quote36,quote37,quote38,quote39,quote40,quote41,quote42,quote43,quote44,quote45,quote46,quote47,quote48];
+
+function calculateScore (energy, mood, tension, calm){
+    let score = 0;
+    console.log(`energy: ${energy}, mood: ${mood}, tension: ${tension}, calm: ${calm}`);
+    switch (energy){
+        case 'high energy': 
+            score += 25;
+        case 'low energy': 
+            score += 5;
+        default: 
+            console.log('Enter a valid energy level')
+    };
+    switch (mood){
+        case 'happy': 
+            score += 25;
+        case 'sad': 
+            score +=5;
+        default: 
+            console.log('Enter a valid mood')
+    };
+    switch (tension){
+        case 'relaxed': 
+            score += 25;
+        case 'tense': 
+            score += 5;
+        default: 
+            console.log('Enter a valid response to tense/ relaxed')
+    };
+    switch (calm){
+        case 'calm': 
+            score += 25;
+        case 'restless': 
+            score +=5;
+        default: 
+            console.log('Enter a valid response for calm/ restless')
+    };
+    console.log(`score: ${score}`);
+    if (score >= 70){
+        return 'green';
+    } else if (score >= 50){
+        return 'yellow';
+    } else if (score > 20){
+        return 'orange';
+    } else {
+        return 'red'
+    };
+};
+
+function generateMessage(score, mood, calm, tension, energy){
+    let choices = [mood, calm, tension, energy];
+    let choicesString = `Today you're feeling ${mood}, ${calm}, ${tension} and you have ${energy}`;
+    let wellnessLevel;
+    switch (score){
+        case 'green': wellnessLevel = 'great - we\'re so glad you\'re feeling good today!';
+        case 'yellow': wellnessLevel = 'good - things sound like they\'re going well but it\'s always good to look after yourself:)';
+        case 'orange': wellnessLevel = 'okay - don\'t forget to look after yourself today!';
+        case 'red': wellnessLevel = 'needs some love - you should take care of yourself today <3'
+    };
+    let wellnessLevelString = `Your overall wellness level today is: ${wellnessLevel}`;
+    let adviceArray = [];
+    let quoteArray = [];
+    for (quote of quoteArray){
+        if (choices.some(choice => choice===quote.mood) && quote[colors].some(color => color===score) && quote.isQuote===0){
+            adviceArray.push(quote.text);
+        } else if (choices.some(choice => choice===quote.mood) && quote[colors].some(color => color===score) && quote.isQuote===1){
+            quoteArray.push(quote.text);
+        };
+    };
+    let advicesQuote = adviceArray[Math.floor(Math.random()*(adviceArray.length-1))];
+    let quotesQuote = quoteArray[Math.floor(Math.random()*(quoteArray.length-1))];
+    return choicesString + wellnessLevelString + advicesQuote + quotesQuote;
+};
+
+// user input
+let mood = 'happy';
+let energy = 'high energy';
+let calm = 'calm';
+let tension = 'relaxed';
+
+//calculate score
+let score = calculateScore(energy, mood, tension, calm);
+
+//print message
+console.log(generateMessage(score, mood, calm, tension, energy));
